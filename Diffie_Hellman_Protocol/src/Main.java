@@ -6,8 +6,15 @@ public class Main {
 
         // TEST OUTPUT
         BigInteger prime = diffieHellmanSimulation.generateLargePrime(2048);
-        System.out.println("Generated prime number is: " + prime);
+        System.out.println("Prosti broj (p): " + prime);
+
+        BigInteger generator = diffieHellmanSimulation.generateGenerator(prime);
+        System.out.println("generator (g): " + generator);
+
         BigInteger privateKey =  diffieHellmanSimulation.generatePrivateKey(prime);
         System.out.println("Generated private key is: " + privateKey);
+
+        BigInteger publicKey = diffieHellmanSimulation.calculatePublicKey(generator,privateKey,prime);
+        System.out.println("public key je: " + publicKey);
     }
 }
