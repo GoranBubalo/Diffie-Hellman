@@ -22,13 +22,13 @@ public class User {
     }
 
     // Calculate public key
-    public void calculatePublicKey(BigInteger generator, BigInteger privateKey, BigInteger primeNumber) {
+    public void calculatePublicKey(BigInteger generator, BigInteger primeNumber) {
         this.publicKey = generator.modPow(privateKey,primeNumber);
-        System.out.println(userName + "'s private key is " + publicKey);
+        System.out.println(userName + "'s public key is " + publicKey);
 
     }
     // Calculate shared key using received public key
-    public BigInteger calculateSharedKey(BigInteger receivedPublicKey, BigInteger privateKey, BigInteger primeNumber){
+    public BigInteger calculateSharedKey(BigInteger receivedPublicKey, BigInteger primeNumber){
         BigInteger sharedKey = receivedPublicKey.modPow(privateKey,primeNumber);
         System.out.println(userName + "'s Shared Key: " + sharedKey);
         return sharedKey;
@@ -37,5 +37,9 @@ public class User {
     // Getting public key
     public BigInteger getPublicKey() {
         return publicKey;
+    }
+
+    public BigInteger getPrivateKey() {
+        return privateKey;
     }
 }

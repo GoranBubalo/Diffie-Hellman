@@ -49,13 +49,15 @@ public class DiffieHellmanSimulation {
         alice.generatePrivateKey(primeNumber);
         bob.generatePrivateKey(primeNumber);
 
-        alice.calculatePublicKey(generator,alice.getPublicKey(),primeNumber);
-        bob.calculatePublicKey(generator,bob.getPublicKey(),primeNumber);
+        System.out.println();
+
+        alice.calculatePublicKey(generator,primeNumber);
+        bob.calculatePublicKey(generator,primeNumber);
 
         System.out.println("---------------------------------------------------");
 
-        BigInteger alicShareKey = alice.calculateSharedKey(bob.getPublicKey(),alice.getPublicKey(), primeNumber);
-        BigInteger bobSharedKey = bob.calculateSharedKey(alice.getPublicKey(),bob.getPublicKey(), primeNumber);
+        BigInteger alicShareKey = alice.calculateSharedKey(bob.getPublicKey(), primeNumber);
+        BigInteger bobSharedKey = bob.calculateSharedKey(alice.getPublicKey(), primeNumber);
 
         if (alicShareKey.equals(bobSharedKey)) {
             System.out.println("Success! Both users calculated the same shared key");
