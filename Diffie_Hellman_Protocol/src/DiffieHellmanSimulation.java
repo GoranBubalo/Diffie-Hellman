@@ -8,53 +8,62 @@ public class DiffieHellmanSimulation {
 
     // Method for  generating a large Prime number lest say 2048 bits
     public BigInteger generateLargePrime(int bitLength) {
-        //Declaring object prime type of BigInteger
         BigInteger primeNumber;
-
-        //Generate  numbers until we find prime
         do {
-            //Generate a random number with set length (Initializing)
-            primeNumber = new BigInteger(bitLength, random);
-
-            //Continue until we get prime number
-        } while (!primeNumber.isProbablePrime(100));
+            primeNumber = new BigInteger(bitLength, random);//Generate a random number with set length (Initializing)
+        } while (!primeNumber.isProbablePrime(100));  //Continue until we get prime number
         return primeNumber;
     }
 
     // Method for generating a generator
     public BigInteger generateGenerator(BigInteger primeNumber) {
         BigInteger[] possibleGenerators = {BigInteger.valueOf(2), BigInteger.valueOf(3), BigInteger.valueOf(4), BigInteger.valueOf(5)};
-
         for (BigInteger generator : possibleGenerators){
             if (generator.compareTo(primeNumber) < 0){
                 return generator;
             }
         }
-
-        //Default value
-        return BigInteger.valueOf(2);
+        return BigInteger.valueOf(2);//Default value
     }
 
-    // Generating a random private key smaller then p
-    public BigInteger generatePrivateKey(BigInteger p) {
-        BigInteger privateKey;
+    public void runDiffiHellmanKeyEncripton(){
+        //1.Step generate prime numbers and generator
+        //2.Step Create Users
+        //3. Step Generate private Keys
+        //4. Step Calculate public Keys
+        //5. StepExchange public key and calculate shared secret keys
+        //6. Step Verify Result
 
-        //Generate a random number in the range [2. p -1]
-        do {
-            privateKey = new BigInteger(p.bitLength(), random);
-        } while (privateKey.compareTo(BigInteger.TWO) < 0 || privateKey.compareTo(p) >= 0);
+        BigInteger primeNumber = generateLargePrime(2048);
+        BigInteger generator = generateGenerator(primeNumber);
 
-        return privateKey;
-    }
+        System.out.println("Prime Number (p): " + primeNumber);
+        System.out.println("generator (g): " + generator);
+        System.out.println("---------------------------------------------------");
 
-    // Method for calculating the public key
-    public BigInteger calculatePublicKey(BigInteger g, BigInteger privateKey, BigInteger p) {
-        return g.modPow(privateKey, p);
-    }
+        User alice = new User("Alice");
+        User bob = new User("Bob");
 
-    // Method for calculating secure key
-    public BigInteger calculateSharedKey(BigInteger receivedPublicKey, BigInteger privateKey, BigInteger p) {
-        return receivedPublicKey.modPow(privateKey, p);
+
+
+        alice.generatePrivateKey(primeNumber);
+        bob.generatePrivateKey(primeNumber);
+
+        alice.calculatePublicKey(generator,alice.getPublicKey(),primeNumber);
+        bob.calculatePublicKey(generator,bob.getPublicKey(),primeNumber);
+
+        System.out.println("---------------------------------------------------");
+
+        BigInteger alicShareKey = alice.calculateSharedKey(bob.getPublicKey(),alice.getPublicKey(), primeNumber);
+        BigInteger bobSharedKey = bob.calculateSharedKey(alice.getPublicKey(),bob.getPublicKey(), primeNumber);
+
+        if (alicShareKey.equals(bobSharedKey)) {
+            System.out.println("Success! Both users calculated the same shared key");
+        } else {
+            System.out.println("Error! Shared keys do not match.");
+        }
+
     }
 
 }
+
